@@ -9,27 +9,27 @@ default: &default
 
 development:
   <<: *default
-  database: app_development
+  database: vtube_development
 
 test:
   <<: *default
-  database: app_test
+  database: vtube_test
 
 production:
   primary: &primary_production
     <<: *default
-    database: app_production
+    database: vtube_production
     username: app
     password: <%= ENV["APP_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
-    database: app_production_cache
+    database: app_pro1duction_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: app_production_queue
+    database: vtube_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: app_production_cable
+    database: vtube_production_cable
     migrations_paths: db/cable_migrate
