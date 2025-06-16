@@ -23,7 +23,7 @@ production:
     password: <%= ENV["APP_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
-    database: app_pro1duction_cache
+    database: vtube_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
