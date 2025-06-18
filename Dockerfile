@@ -6,7 +6,7 @@ WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 
-RUN gem install bundler
+RUN grep -A1 "BUNDLED WITH" Gemfile.lock | tail -n1 | xargs gem install bundler -v
 RUN bundle install
 
 COPY . /app

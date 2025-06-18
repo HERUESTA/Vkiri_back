@@ -9,4 +9,4 @@ default: &default
 
 test:
     <<: *default
-    database: rails_netflix_app_test_ci
+    database: vkiri_test
