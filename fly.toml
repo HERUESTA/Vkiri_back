@@ -1,5 +1,16 @@
+# fly.toml app configuration file generated for vkiri-back on 2025-06-19T00:31:25+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'vkiri-back'
+primary_region = 'nrt'
+
 [build]
-  dockerfile = "Dockerfile"
-  
+  dockerfile = 'Dockerfile'
+
 [deploy]
-  release_command = "bundle exec rails db:migrate"
+  release_command = 'bundle exec rails db:migrate'
+
+[[vm]]
+  size = 'shared-cpu-1x'
