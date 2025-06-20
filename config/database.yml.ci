@@ -1,12 +1,6 @@
-default: &default
-
-    adapter: postgresql
-    encoding: unicode
-    host: localhost
-    username: postgres
-    password: postgres
-    pool: 5
-
 test:
-    <<: *default
-    database: vkiri_test
+  <<: *default
+  database: vkiri__test
+  username: postgres
+  password: postgres
+  host: localhost
