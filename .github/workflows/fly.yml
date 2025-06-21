@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: superfly/flyctl-actions@master
+      - uses: superfly/flyctl-actions/setup-flyctl@master
         with:
           version: latest
       - run: flyctl deploy --remote-only --app vkiri-back
