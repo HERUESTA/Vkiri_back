@@ -9,7 +9,7 @@ class CreateVideos < ActiveRecord::Migration[8.0]
       t.string :uploader_name, limit: 255
       t.string :uploader_channel_id, limit: 255
       t.datetime :published_at
-      
+
       t.timestamps
     end
   end

@@ -6,7 +6,7 @@ class CreateLivers < ActiveRecord::Migration[8.0]
       t.string :channel_id, limit: 255
       t.string :channel_url, limit: 255
       t.string :avatar_url, limit: 255
-      
+
       t.timestamps
     end
   end

@@ -7,7 +7,7 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :display_name, limit: 255
       t.boolean :email_verified, default: false
       t.datetime :email_verified_at
-      
+
       t.timestamps
     end
   end
