@@ -17,11 +17,7 @@ namespace :youtube do
   desc "Fetch videos for multiple channels"
   task fetch_multiple_channels: :environment do
     channels = [
-      "ぶいすぽっ！",
-      "VSPO!",
-      "一ノ瀬うるは",
-      "藍沢エマ",
-      "八雲べに"
+      "ガルお【切り抜き】"
     ]
 
     channels.each do |channel_name|
