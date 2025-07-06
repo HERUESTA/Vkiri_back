@@ -10,4 +10,16 @@ class Video < ApplicationRecord
 
   scope :published_after, ->(date) { where("published_at > ?", date) }
   scope :by_liver, ->(liver_id) { joins(:video_livers).where(video_livers: { liver_id: liver_id }) }
+
+  # YouTube動画URLを生成するメソッド
+  def youtube_url
+    return nil if youtube_id.blank?
+    "https://www.youtube.com/watch?v=#{youtube_id}"
+  end
+
+  # 埋め込み用URLを生成するメソッド
+  def youtube_embed_url
+    return nil if youtube_id.blank?
+    "https://www.youtube.com/embed/#{youtube_id}"
+  end
 end

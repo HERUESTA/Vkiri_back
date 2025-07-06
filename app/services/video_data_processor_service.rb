@@ -4,7 +4,7 @@ class VideoDataProcessorService
   end
 
   def process_videos_by_channel_name(channel_name)
-    Rails.logger.info "Processing videos for channel: #{channel_name}"
+    Rails.logger.info "execute start: #{channel_name}"
 
     channel_id = @youtube_service.get_channel_id_by_name(channel_name)
 
@@ -16,6 +16,7 @@ class VideoDataProcessorService
     liver = find_or_create_liver(channel_id, channel_name)
 
     videos = @youtube_service.get_videos_by_channel_id(channel_id)
+    Rails.logger.debug "Retrieved #{videos.size} videos from API"
 
     if videos.empty?
       Rails.logger.info "No videos found for channel: #{channel_name}"
@@ -23,7 +24,10 @@ class VideoDataProcessorService
     end
 
     video_ids = videos.map { |video| video.dig("id", "videoId") }.compact
+    Rails.logger.debug "Extracted video IDs: #{video_ids.join(', ')}"
+    
     detailed_videos = @youtube_service.get_video_details(video_ids)
+    Rails.logger.debug "Retrieved detailed information for #{detailed_videos.size} videos"
 
     saved_videos = save_videos_to_database(detailed_videos, liver)
 
