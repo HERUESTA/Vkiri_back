@@ -12,12 +12,18 @@ class YoutubeVideoFetchJob < ApplicationJob
   def perform(channel_name)
     Rails.logger.info "YoutubeAPIのチャンネル情報取得を開始します: #{channel_name} at #{Time.current}"
 
+    # メモリ使用量を抑制するため、ガベージコレクションを強制実行
+    GC.start
+
     processor = VideoDataProcessorService.new
     result = processor.process_videos_by_channel_name(channel_name)
 
     Rails.logger.info "YoutubeAPIのチャンネル情報取得が完了しました: #{channel_name}. " \
                      "Videos: #{result[:videos_count]}, " \
                      "Liver created: #{result[:liver_created]}"
+
+    # 処理完了後もガベージコレクションを実行
+    GC.start
 
     result
   rescue YoutubeApiError => e
