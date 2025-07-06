@@ -3,18 +3,25 @@ class Api::V1::VideosController < ApplicationController
 
   # GET /api/v1/videos
   def index
+    per_page = params[:per_page]&.to_i || 20
+    current_page = params[:page]&.to_i || 1
+    offset = (current_page - 1) * per_page
+    
     @videos = Video.includes(:livers)
                    .order(published_at: :desc)
-                   .page(params[:page])
-                   .per(params[:per_page] || 20)
+                   .limit(per_page)
+                   .offset(offset)
+    
+    total_count = Video.count
+    total_pages = (total_count.to_f / per_page).ceil
     
     render json: {
       videos: serialize_videos(@videos),
       pagination: {
-        current_page: @videos.current_page,
-        total_pages: @videos.total_pages,
-        total_count: @videos.total_count,
-        per_page: @videos.limit_value
+        current_page: current_page,
+        total_pages: total_pages,
+        total_count: total_count,
+        per_page: per_page
       }
     }
   end
@@ -30,19 +37,27 @@ class Api::V1::VideosController < ApplicationController
       return render_error('liver_id parameter is required')
     end
 
-    @videos = Video.by_liver(params[:liver_id])
+    per_page = params[:per_page]&.to_i || 20
+    current_page = params[:page]&.to_i || 1
+    offset = (current_page - 1) * per_page
+
+    @videos = Video.joins(:video_livers)
+                   .where(video_livers: { liver_id: params[:liver_id] })
                    .includes(:livers)
                    .order(published_at: :desc)
-                   .page(params[:page])
-                   .per(params[:per_page] || 20)
+                   .limit(per_page)
+                   .offset(offset)
+    
+    total_count = Video.joins(:video_livers).where(video_livers: { liver_id: params[:liver_id] }).count
+    total_pages = (total_count.to_f / per_page).ceil
     
     render json: {
       videos: serialize_videos(@videos),
       pagination: {
-        current_page: @videos.current_page,
-        total_pages: @videos.total_pages,
-        total_count: @videos.total_count,
-        per_page: @videos.limit_value
+        current_page: current_page,
+        total_pages: total_pages,
+        total_count: total_count,
+        per_page: per_page
       }
     }
   end

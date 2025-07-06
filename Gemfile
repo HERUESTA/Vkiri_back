@@ -44,6 +44,9 @@ gem "oj", "~> 3.0"
 # ISO8601 duration parsing
 gem "iso8601", "~> 0.13"
 
+# Pagination
+gem "kaminari", "~> 1.2"
+
 # YouTube Data API v3 client (optional, for structured API access)
 gem "google-api-client", "~> 0.53"
 
