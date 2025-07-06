@@ -10,13 +10,13 @@ class YoutubeApiService
       faraday.options.open_timeout = 10
     end
     @api_key = ENV["YOUTUBE_API_KEY"]
-    
+
     Rails.logger.debug "YouTube API Service initialized with API key: #{@api_key.present? ? 'present' : 'missing'}"
   end
 
   def get_channel_id_by_name(channel_name)
     Rails.logger.debug "Getting channel ID for: #{channel_name}"
-    
+
     response = @connection.get("/youtube/v3/search") do |req|
       req.params["key"] = @api_key
       req.params["part"] = "snippet"
@@ -36,7 +36,7 @@ class YoutubeApiService
 
   def get_videos_by_channel_id(channel_id, max_results: 50)
     Rails.logger.debug "Getting videos for channel ID: #{channel_id}"
-    
+
     response = @connection.get("/youtube/v3/search") do |req|
       req.params["key"] = @api_key
       req.params["part"] = "snippet"
@@ -56,7 +56,7 @@ class YoutubeApiService
 
   def get_video_details(video_ids)
     return [] if video_ids.empty?
-    
+
     Rails.logger.debug "Getting video details for #{video_ids.size} videos: #{video_ids.join(', ')}"
 
     response = @connection.get("/youtube/v3/videos") do |req|
@@ -88,7 +88,7 @@ class YoutubeApiService
     Rails.logger.debug "API Response Status: #{response.status}"
     Rails.logger.debug "API Response Body Type: #{response.body.class}"
     Rails.logger.debug "API Response Body: #{response.body.inspect}"
-    
+
     unless response.success?
       error_message = response.body.dig("error", "message") || "Unknown error"
       raise YoutubeApiError.new("youtubeAPIレスポンスの取得で失敗しました #{error_message}", response.status)

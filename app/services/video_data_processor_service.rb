@@ -25,7 +25,7 @@ class VideoDataProcessorService
 
     video_ids = videos.map { |video| video.dig("id", "videoId") }.compact
     Rails.logger.debug "Extracted video IDs: #{video_ids.join(', ')}"
-    
+
     detailed_videos = @youtube_service.get_video_details(video_ids)
     Rails.logger.debug "Retrieved detailed information for #{detailed_videos.size} videos"
 
