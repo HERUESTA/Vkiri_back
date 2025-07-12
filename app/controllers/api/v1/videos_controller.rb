@@ -7,8 +7,16 @@ class Api::V1::VideosController < ApplicationController
     current_page = params[:page]&.to_i || 1
     offset = (current_page - 1) * per_page
 
+    # ソート順を決定
+    order_clause = case params[:sort]
+                   when "popular"
+                     { view_count: :desc }
+                   else
+                     { published_at: :desc }
+                   end
+
     @videos = Video.includes(:livers)
-                   .order(published_at: :desc)
+                   .order(order_clause)
                    .limit(per_page)
                    .offset(offset)
 
