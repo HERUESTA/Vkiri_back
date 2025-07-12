@@ -36,7 +36,7 @@ gem "thruster", require: false
 gem "rack-cors"
 
 # HTTP requests
-gem "faraday", "~> 2.0"
+gem "faraday", "~> 2.13"
 
 # JSON parsing
 gem "oj", "~> 3.0"
