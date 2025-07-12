@@ -5,20 +5,12 @@ class RelatedVideosService
   end
 
   def call
-    current_liver_ids = @current_video.livers.pluck(:id)
+    # 現在の動画を除外した関連動画を取得
+    related_videos = Video.includes(:livers)
+                          .where.not(id: @current_video.id)
+                          .order(published_at: :desc)
+                          .limit(@limit)
 
-    available_livers = Liver.where.not(display_name: [ nil, "" ])
-                           .where.not(id: current_liver_ids)
-                           .order("RANDOM()")
-                           .limit(5)
-
-    related_videos = []
-    available_livers.each do |liver|
-      videos = liver.videos.order(published_at: :desc).limit(3)
-      related_videos.concat(videos.to_a)
-      break if related_videos.size >= @limit
-    end
-
-    related_videos.first(@limit)
+    related_videos.to_a
   end
 end
