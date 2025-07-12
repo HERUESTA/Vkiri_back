@@ -29,8 +29,8 @@ class Api::V1::VideosController < ApplicationController
   # GET /api/v1/videos/:id
   def show
     related_videos = RelatedVideosService.new(@video).call
-    
-    render json: { 
+
+    render json: {
       video: serialize_video(@video),
       related_videos: related_videos.map { |video| serialize_related_video(video) }
     }
