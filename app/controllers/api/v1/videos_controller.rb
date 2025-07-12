@@ -32,7 +32,7 @@ class Api::V1::VideosController < ApplicationController
 
     render json: {
       video: serialize_video(@video),
-      related_videos: related_videos.map { |video| serialize_related_video(video) }
+      related_videos: serialize_videos(related_videos)
     }
   end
 
@@ -141,19 +141,4 @@ class Api::V1::VideosController < ApplicationController
     date.strftime("%Y年%m月%d日")
   end
 
-  def serialize_related_video(video)
-    {
-      id: video.id,
-      title: video.title,
-      thumbnail_url: video.thumbnail_url,
-      duration_seconds: video.duration_seconds,
-      duration_formatted: format_duration(video.duration_seconds),
-      view_count: video.view_count,
-      view_count_formatted: format_view_count(video.view_count),
-      published_at: video.published_at,
-      published_at_formatted: format_date(video.published_at),
-      youtube_url: video.youtube_url,
-      liver_name: video.livers.first&.display_name
-    }
-  end
 end
