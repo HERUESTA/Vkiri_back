@@ -1,20 +1,20 @@
 class Api::V1::VideosController < ApplicationController
-  before_action :set_video, only: [:show]
+  before_action :set_video, only: [ :show ]
 
   # GET /api/v1/videos
   def index
     per_page = params[:per_page]&.to_i || 20
     current_page = params[:page]&.to_i || 1
     offset = (current_page - 1) * per_page
-    
+
     @videos = Video.includes(:livers)
                    .order(published_at: :desc)
                    .limit(per_page)
                    .offset(offset)
-    
+
     total_count = Video.count
     total_pages = (total_count.to_f / per_page).ceil
-    
+
     render json: {
       videos: serialize_videos(@videos),
       pagination: {
@@ -34,7 +34,7 @@ class Api::V1::VideosController < ApplicationController
   # GET /api/v1/videos/by_liver
   def by_liver
     unless params[:liver_id].present?
-      return render_error('liver_id parameter is required')
+      return render_error("liver_id parameter is required")
     end
 
     per_page = params[:per_page]&.to_i || 20
@@ -47,10 +47,10 @@ class Api::V1::VideosController < ApplicationController
                    .order(published_at: :desc)
                    .limit(per_page)
                    .offset(offset)
-    
+
     total_count = Video.joins(:video_livers).where(video_livers: { liver_id: params[:liver_id] }).count
     total_pages = (total_count.to_f / per_page).ceil
-    
+
     render json: {
       videos: serialize_videos(@videos),
       pagination: {
@@ -67,7 +67,7 @@ class Api::V1::VideosController < ApplicationController
   def set_video
     @video = Video.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render_not_found('Video not found')
+    render_not_found("Video not found")
   end
 
   def serialize_videos(videos)
@@ -107,11 +107,11 @@ class Api::V1::VideosController < ApplicationController
 
   def format_duration(seconds)
     return "0:00" if seconds.nil? || seconds <= 0
-    
+
     hours = seconds / 3600
     minutes = (seconds % 3600) / 60
     secs = seconds % 60
-    
+
     if hours > 0
       sprintf("%d:%02d:%02d", hours, minutes, secs)
     else
@@ -121,7 +121,7 @@ class Api::V1::VideosController < ApplicationController
 
   def format_view_count(count)
     return "0" if count.nil? || count <= 0
-    
+
     if count >= 1_000_000
       sprintf("%.1fM", count / 1_000_000.0)
     elsif count >= 1_000

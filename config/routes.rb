@@ -8,12 +8,12 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      resources :videos, only: [:index, :show] do
+      resources :videos, only: [ :index, :show ] do
         collection do
           get :by_liver
         end
       end
-      resources :livers, only: [:index, :show] do
+      resources :livers, only: [ :index, :show ] do
         member do
           get :videos
         end

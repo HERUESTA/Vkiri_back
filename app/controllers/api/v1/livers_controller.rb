@@ -1,10 +1,10 @@
 class Api::V1::LiversController < ApplicationController
-  before_action :set_liver, only: [:show, :videos]
+  before_action :set_liver, only: [ :show, :videos ]
 
   # GET /api/v1/livers
   def index
     @livers = Liver.order(:display_name)
-    
+
     render json: {
       livers: serialize_livers(@livers)
     }
@@ -21,7 +21,7 @@ class Api::V1::LiversController < ApplicationController
                            .order(published_at: :desc)
                            .page(params[:page])
                            .per(params[:per_page] || 20)
-    
+
     render json: {
       liver: serialize_liver(@liver),
       videos: serialize_videos(@videos),
@@ -39,7 +39,7 @@ class Api::V1::LiversController < ApplicationController
   def set_liver
     @liver = Liver.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render_not_found('Liver not found')
+    render_not_found("Liver not found")
   end
 
   def serialize_livers(livers)
@@ -87,11 +87,11 @@ class Api::V1::LiversController < ApplicationController
 
   def format_duration(seconds)
     return "0:00" if seconds.nil? || seconds <= 0
-    
+
     hours = seconds / 3600
     minutes = (seconds % 3600) / 60
     secs = seconds % 60
-    
+
     if hours > 0
       sprintf("%d:%02d:%02d", hours, minutes, secs)
     else
@@ -101,7 +101,7 @@ class Api::V1::LiversController < ApplicationController
 
   def format_view_count(count)
     return "0" if count.nil? || count <= 0
-    
+
     if count >= 1_000_000
       sprintf("%.1fM", count / 1_000_000.0)
     elsif count >= 1_000
